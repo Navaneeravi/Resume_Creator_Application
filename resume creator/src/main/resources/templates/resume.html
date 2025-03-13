@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resume</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9; /* Light background color */
+            color: #333;
+        }
+
+        /* Container for the resume */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header section with personal information */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #3b5998; /* Blue accent color */
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin: 0;
+            color: #3b5998;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #3b5998;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #3b5998;
+        }
+
+        /* Styling each section */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        /* Styling the list items in each section */
+        .content-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content-list li {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .content-list li:before {
+            content: '•';
+            color: #3b5998;
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        /* Download button styling */
+        .download-button {
+            display: inline-block;
+            background-color: #3b5998;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+        }
+
+        .download-button:hover {
+            background-color: #2a437b;
+            transform: translateY(-2px);
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+            }
+
+            .content-list li {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section with Name and Contact Info -->
+        <div class="header">
+            <h1 th:text="${resume.name}">Name</h1>
+            <p>
+                Email: <span th:text="${resume.email}">Email</span><br>
+                LinkedIn: <span th:text="${resume.linkedin}">LinkedIn</span><br>
+                Phone: <span th:text="${resume.phone}">Phone</span>
+            </p>
+        </div>
+
+        <!-- Career Objective Section -->
+        <div class="section">
+            <div class="section-title">Career Objective</div>
+            <ul class="content-list">
+                <li th:each="careerObjective : ${resume.careerObjective}"
+                    th:text="${careerObjective.description}">Career Objective</li>
+            </ul>
+        </div>
+
+        <!-- Education Section -->
+        <div class="section">
+            <div class="section-title">Education</div>
+            <ul class="content-list">
+                <li th:each="education : ${resume.educationList}"
+                    th:if="${education.university != null and education.degree != null and education.graduationYear != null}">
+                    <span th:text="${education.university}">University</span> - 
+                    <span th:text="${education.degree}">Degree</span> - 
+                    <span th:text="${education.graduationYear}">Graduation Year</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section">
+            <div class="section-title">Projects</div>
+            <ul class="content-list">
+                <li th:each="project : ${resume.project}"
+                    th:if="${project.title != null and project.description != null}">
+                    <span th:text="${project.title}">Title</span> - 
+                    <span th:text="${project.description}">Description</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Courses Section -->
+        <div class="section">
+            <div class="section-title">Courses</div>
+            <ul class="content-list">
+                <li th:each="course : ${resume.courses}" th:text="${course}">Course</li>
+            </ul>
+        </div>
+
+        <!-- Achievements Section -->
+        <div class="section">
+            <div class="section-title">Academic Achievements</div>
+            <ul class="content-list">
+                <li th:each="achievement : ${resume.academicAchievements}"
+                    th:text="${achievement}">Achievement</li>
+            </ul>
+        </div>
+
+        <!-- Extracurricular Activities Section -->
+        <div class="section">
+            <div class="section-title">Extracurricular Activities</div>
+            <ul class="content-list">
+                <li th:each="activity : ${resume.extracurricularActivities}"
+                    th:text="${activity}">Activity</li>
+            </ul>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <ul class="content-list">
+                <li th:each="skill : ${resume.skills}" th:text="${skill.name}">Skill</li>
+            </ul>
+        </div>
+
+        <!-- Work Experience Section -->
+        <div class="section">
+            <div class="section-title">Work Experience</div>
+            <ul class="content-list">
+                <li th:each="workExperience : ${resume.workExperiences}"
+                    th:text="${workExperience.description}">Work Experience</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>
